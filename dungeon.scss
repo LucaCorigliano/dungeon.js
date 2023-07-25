@@ -1,0 +1,319 @@
+
+
+body.is-dungeon-js {
+    overscroll-behavior-y: contain;
+    touch-action: manipulation;
+    *:not(.djs-visible) {
+        display: none !important;
+    }
+}
+#dungeon-js {
+    &.is-back .djs-figure.in-viewport:has(.djs-back-image.is-loading),
+    &:not(.is-back) .djs-figure.in-viewport:has(.djs-front-image.is-loading) {
+        @include loading-placeholder();
+    }
+    &:not(.is-back) {
+        .djs-figure .djs-image.djs-back-image {
+            transform: rotateY(-0.5turn);
+        }
+    }
+    &.is-back {
+        .djs-figure .djs-image:not(.djs-back-image) {
+            transform: rotateY(0.5turn);
+        }
+    }
+    position: absolute;
+    top: 0; left: 0;
+    z-index: 99;
+    overflow: hidden;
+    background: lighten($dark, 5%);
+  
+    &.is-loading{
+        .djs-inner {
+            opacity: 0;
+        }
+        .djs-spinner {
+            @extend %loader;
+            $spinner-width: 120px;
+            width: $spinner-width;
+            border-width: 10px;
+            height: $spinner-width;
+            position: absolute;
+            top: calc(45vh - ($spinner-width/2));
+            left: calc(50vw - ($spinner-width/2));
+        }  
+        .djs-control {
+            opacity: 0;
+        }
+    }
+    .djs-marker {
+        position: absolute;
+        top: var(--top);
+        left: var(--left);
+        transform: translate(-50%, -50%);
+        background: transparent;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid black;
+        &:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 60%;
+            transform:translate(-50%, -50%);
+            background-color:white;
+        }
+        &:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            height: 2px;
+            width: 60%;
+            transform:translate(-50%, -50%);
+            background-color:white;
+        }
+    }
+    .djs-floater {
+        z-index: 99;
+        position: absolute;
+        pointer-events: none;
+        user-select: none;
+        border-radius: 50%;
+        width: 200px;
+        height: 200px;
+        border: 3px solid $dark;
+        visibility: hidden;
+        background-repeat: no-repeat;
+        background-attachment:local;
+        background-color: $dark;
+        top: var(--top);
+        left: var(--left);
+        .measure {
+            color: white;
+            text-shadow: 0 2px 0 black, 0 -2px 0 black, 2px 0 0 black, -2px 0 0 black;
+            position: absolute;
+            width: 100%;
+            top: 100%;
+            font-size: 200%;
+            font-family: monospace;
+            text-align: center;
+        }
+        &.is-measure:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 90%;
+            transform:translate(-50%, -50%);
+            background-color:white;
+        }
+        &.is-measure:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            height: 2px;
+            width: 90%;
+            transform:translate(-50%, -50%);
+            background-color:white;
+        }
+        &.is-touch {
+            border-radius: 0;
+            @media screen and (orientation:landscape) {
+                top: 5px;
+                left: 5px;
+                right: 5px;
+                
+            }
+            @media screen and (orientation:portrait) {
+                top: 5px;
+                bottom: 5px;
+                left: 5px;
+            }
+        }
+    }
+    .djs-watermark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 10vw;
+        max-width: 200px;
+        opacity: .2;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        user-select: none;
+    }
+    .djs-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        color: $white;
+        background: $info;
+        pointer-events: none;
+        user-select: none;
+        border-radius: 9999px;
+        padding-left: calc(1em + 0.25em);
+        padding-right: calc(1em + 0.25em);
+        padding-bottom: calc(0.5em - 2px);
+        padding-top: calc(0.5em - 2px);
+        text-align: center;
+        white-space: nowrap;
+    }
+    .djs-control {
+        position: absolute;
+        
+        font-size: 1.25rem;
+        bottom: 4rem;
+        left: 50%;
+        box-shadow: 0px 0px 5px rgba(0,0,0,0.3), 0px 0px 10px rgba(0,0,0,0.1);
+        $button-margin: 20px;
+        &.is-up {
+            border-radius: 50%;
+            transform: translate(-50%, -80%);
+        }
+        &.is-down {
+            border-radius: 50%;
+            transform: translate(-50%, 80%);
+        }
+        &.is-left {
+            border-radius: 50%;
+            transform: translate(-130%, 0);
+        }
+        &.is-right {
+            border-radius: 50%;
+            transform: translate(30%, 0);
+        }
+        &.is-close {
+            bottom: $button-margin;
+            left: $button-margin;
+            right: auto;
+            top: auto;
+        }
+        &.is-rotate {
+            bottom: $button-margin;
+            right: $button-margin;
+            left: auto;
+            top: auto;
+        }
+        &.is-screenshot {
+            bottom: auto;
+            right: auto;
+            left: $button-margin;
+            top: $button-margin;
+        }
+
+        // Tablet / desktop
+        @media screen and (min-width: $tablet)  {
+            
+            font-size: 1.5rem;
+
+            &.is-up {
+                bottom : auto;
+                right: auto;
+                top: $button-margin;
+                left: 50%;
+                transform: translate(-50%, 0);
+            }
+            &.is-down {
+                top : auto;
+                right: auto;
+                bottom: $button-margin;
+                left: 50%;
+                transform: translate(-50%, 0);
+            }
+            &.is-left {
+                bottom : auto;
+                right: auto;
+                left: $button-margin;
+                top: 50%;
+                transform: translate(0, -50%);
+            }
+            &.is-right {
+                bottom : auto;
+                left: auto;
+                right: $button-margin;
+                top: 50%;
+                transform: translate(0, -50%);
+            }
+        }
+
+    }
+    .djs-inner {
+        width: 2000000px;
+        transition: transform .3s ease-out;
+        .djs-row {
+            display: flex;
+            .djs-figure {
+                opacity: 0;
+                visibility: hidden;
+                
+                perspective: 2000px;
+                transition: transform .3s ease-out, opacity 0.8s ease-out;
+                transform-style: preserve-3d;
+                will-change: transform, opacity;
+                user-select:none;
+                touch-action: manipulation;
+                max-width: 90vw;
+                //max-height: 90vh;
+                display: inline-block;
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+                @include from ($tablet) {
+                    max-width: 80vw;
+                    //max-height: 80vh;
+                }      
+      
+                &.in-viewport {
+                    visibility: visible;
+                    opacity: 1;
+                }
+                .djs-image {
+                    &.is-loading { visibility: hidden; }
+                    
+                    backface-visibility: hidden;
+                    user-select:none;
+                    max-width: 100%;
+                    max-height: 100%;
+                    transition: transform 0.6s ease-out;
+                    transform-style: preserve-3d;
+                    pointer-events: none;
+                    &.djs-back-image {
+                        position: absolute;
+                        left: 0;
+                    }
+                }
+                &.is-selected {
+                    z-index: 99;
+                }
+                &:not(.is-selected) {
+                    .djs-image {
+                        opacity: 0.5;
+                    }
+                    transform-origin: center center;
+                    transform: scale(0.9);
+                    
+                }
+            }
+        }
+
+    }
+}
+
+@keyframes rotate1 {
+    from { transform: rotate(0deg);}
+    to {transform: rotate(360deg);}
+  }
+  @keyframes rotate2 {
+    from { transform: translate(-50%, -50%) rotate(360deg);}
+    to {transform: translate(-50%, -50%) rotate(0deg);} 
+  }
+  @keyframes rotate3 {
+     from { transform: translate(-50%, -50%) rotate(0deg);}
+     to {transform: translate(-50%, -50%) rotate(360deg);}  
+  }   
